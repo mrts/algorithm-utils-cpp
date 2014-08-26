@@ -14,11 +14,23 @@
 #include <iostream>
 
 template <typename T>
+typename std::vector<T>::const_iterator
+find_item(const std::vector<T>& items, boost::function<bool(const T&)> criteria)
+{
+    return std::find_if(items.begin(), items.end(), boost::bind(criteria, _1));
+}
+
+template <typename T>
+T& find_item(std::vector<T>& items, boost::function<bool(const T&)> criteria)
+{
+    return *std::find_if(items.begin(), items.end(), boost::bind(criteria, _1));
+}
+
+template <typename T>
 bool item_exists(const std::vector<T>& items,
                  boost::function<bool(const T&)> criteria)
 {
-    return std::find_if(items.begin(), items.end(),
-                        boost::bind(criteria, _1)) != items.end();
+    return find_item(items, criteria) != items.end();
 }
 
 template <typename T>
@@ -30,7 +42,7 @@ void remove_if(std::vector<T>& items, boost::function<bool(const T&)> criteria)
 }
 
 template <typename T>
-std::vector<T> copy_if(std::vector<T>& items,
+std::vector<T> copy_if(const std::vector<T>& items,
                        boost::function<bool(const T&)> criteria)
 {
     std::vector<T> result;
@@ -85,11 +97,26 @@ void test_copy_if()
     std::cout << "test_copy_if: OK" << std::endl;
 }
 
+void test_find_item()
+{
+    std::vector<int> numbers;
+    for (int i = 1; i < 10; ++i)
+        numbers.push_back(i);
+
+    int& found = find_item<int>(numbers, is_even);
+
+    assert(found == 2);
+    assert(numbers[1] == found);
+
+    std::cout << "test_find_item: OK" << std::endl;
+}
+
 int main()
 {
     test_item_exists();
     test_remove_if();
     test_copy_if();
+    test_find_item();
 
     return 0;
 }
