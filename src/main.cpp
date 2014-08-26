@@ -29,6 +29,16 @@ void remove_if(std::vector<T>& items, boost::function<bool(const T&)> criteria)
         items.end());
 }
 
+template <typename T>
+std::vector<T> copy_if(std::vector<T>& items,
+                       boost::function<bool(const T&)> criteria)
+{
+    std::vector<T> result;
+    std::remove_copy_if(items.begin(), items.end(), std::back_inserter(result),
+                        !boost::bind(criteria, _1));
+    return result;
+}
+
 bool is_even(const int& number)
 {
     return number % 2 == 0;
@@ -50,7 +60,7 @@ void test_item_exists()
 void test_remove_if()
 {
     std::vector<int> numbers;
-    for (int i = 0; i < 10; ++i)
+    for (int i = 1; i < 10; ++i)
         numbers.push_back(i);
 
     remove_if<int>(numbers, is_even);
@@ -61,10 +71,25 @@ void test_remove_if()
     std::cout << "test_remove_if: OK" << std::endl;
 }
 
+void test_copy_if()
+{
+    std::vector<int> numbers;
+    for (int i = 1; i < 10; ++i)
+        numbers.push_back(i);
+
+    std::vector<int> even = copy_if<int>(numbers, is_even);
+
+    assert(even.size() == 4);
+    assert(even[1] == 4);
+
+    std::cout << "test_copy_if: OK" << std::endl;
+}
+
 int main()
 {
     test_item_exists();
     test_remove_if();
+    test_copy_if();
 
     return 0;
 }
