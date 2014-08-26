@@ -13,9 +13,36 @@
 #include <algorithm>
 #include <iostream>
 
-using namespace std;
+template <typename T>
+bool item_exists(const std::vector<T>& items,
+                 boost::function<bool(const T&)> conditionPredicate)
+{
+    return std::find_if(items.begin(), items.end(),
+                        boost::bind(conditionPredicate, _1)) != items.end();
+}
+
+bool is_even(const int& number)
+{
+    return number % 2 == 0;
+}
+
+void test_item_exists()
+{
+    std::vector<int> numbers;
+
+    numbers.push_back(1);
+    assert(!item_exists<int>(numbers, is_even));
+
+    numbers.push_back(2);
+    assert(item_exists<int>(numbers, is_even));
+
+    std::cout << "test_item_exists: OK" << std::endl;
+}
 
 int main()
 {
-	return 0;
+    // test_remove_if();
+    test_item_exists();
+
+    return 0;
 }
