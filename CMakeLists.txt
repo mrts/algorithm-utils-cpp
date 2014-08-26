@@ -1,0 +1,22 @@
+CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
+SET (CMAKE_BACKWARDS_COMPATIBILITY 2.6)
+
+PROJECT(algorithm-utils)
+
+INCLUDE_DIRECTORIES("include" "../boost/include")
+
+FILE (GLOB algorithm-utils_SRC src/[^.]*.cpp)
+
+ADD_EXECUTABLE(${PROJECT_NAME} ${algorithm-utils_SRC})
+
+IF(WIN32)
+
+  ADD_DEFINITIONS(-DUNICODE -D_UNICODE -UMBCS -U_MBCS)
+  ADD_DEFINITIONS("/W4 /WX")
+
+ELSE(WIN32)
+
+  SET(CMAKE_CXX_COMPILER clang++)
+  ADD_DEFINITIONS("-Wall -Werror -ferror-limit=5")
+
+ENDIF(WIN32)
