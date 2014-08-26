@@ -15,10 +15,18 @@
 
 template <typename T>
 bool item_exists(const std::vector<T>& items,
-                 boost::function<bool(const T&)> conditionPredicate)
+                 boost::function<bool(const T&)> criteria)
 {
     return std::find_if(items.begin(), items.end(),
-                        boost::bind(conditionPredicate, _1)) != items.end();
+                        boost::bind(criteria, _1)) != items.end();
+}
+
+template <typename T>
+void remove_if(std::vector<T>& items, boost::function<bool(const T&)> criteria)
+{
+    items.erase(
+        std::remove_if(items.begin(), items.end(), boost::bind(criteria, _1)),
+        items.end());
 }
 
 bool is_even(const int& number)
@@ -39,10 +47,24 @@ void test_item_exists()
     std::cout << "test_item_exists: OK" << std::endl;
 }
 
+void test_remove_if()
+{
+    std::vector<int> numbers;
+    for (int i = 0; i < 10; ++i)
+        numbers.push_back(i);
+
+    remove_if<int>(numbers, is_even);
+
+    assert(numbers.size() == 5);
+    assert(numbers[1] == 3);
+
+    std::cout << "test_remove_if: OK" << std::endl;
+}
+
 int main()
 {
-    // test_remove_if();
     test_item_exists();
+    test_remove_if();
 
     return 0;
 }
