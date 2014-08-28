@@ -1,56 +1,9 @@
-#include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/bind.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/foreach.hpp>
-#include <boost/type_traits.hpp>
+#include "algorithm-utils-cpp/algorithm-utils.h"
 
+#include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
-#include <vector>
-#include <string>
-#include <algorithm>
 #include <iostream>
-
-template <typename T>
-typename std::vector<T>::const_iterator
-find_item(const std::vector<T>& items, boost::function<bool(const T&)> criteria)
-{
-    return std::find_if(items.begin(), items.end(), boost::bind(criteria, _1));
-}
-
-template <typename T>
-T& find_item(std::vector<T>& items, boost::function<bool(const T&)> criteria)
-{
-    return *std::find_if(items.begin(), items.end(), boost::bind(criteria, _1));
-}
-
-template <typename T>
-bool item_exists(const std::vector<T>& items,
-                 boost::function<bool(const T&)> criteria)
-{
-    return find_item(items, criteria) != items.end();
-}
-
-template <typename T>
-void remove_items_if(std::vector<T>& items,
-                     boost::function<bool(const T&)> criteria)
-{
-    items.erase(
-        std::remove_if(items.begin(), items.end(), boost::bind(criteria, _1)),
-        items.end());
-}
-
-template <typename T>
-std::vector<T> copy_items_if(const std::vector<T>& items,
-                             boost::function<bool(const T&)> criteria)
-{
-    std::vector<T> result;
-    std::remove_copy_if(items.begin(), items.end(), std::back_inserter(result),
-                        !boost::bind(criteria, _1));
-    return result;
-}
 
 bool is_even(const int& number)
 {
