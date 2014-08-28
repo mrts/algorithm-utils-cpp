@@ -57,6 +57,11 @@ bool is_even(const int& number)
     return number % 2 == 0;
 }
 
+bool is_greater_than(int base, const int& number)
+{
+    return number > base;
+}
+
 void test_item_exists()
 {
     std::vector<int> numbers;
@@ -94,6 +99,14 @@ void test_copy_items_if()
 
     assert(even.size() == 4);
     assert(even[1] == 4);
+
+    // Example of passing a curried function that binds only the first
+    // parameter, but leaves the second open
+    std::vector<int> greater_than_6 =
+        copy_items_if<int>(numbers, boost::bind(is_greater_than, 6, _1));
+
+    assert(greater_than_6.size() == 3);
+    assert(greater_than_6[0] == 7);
 
     std::cout << "test_copy_items_if: OK" << std::endl;
 }
