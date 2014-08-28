@@ -16,9 +16,10 @@ find_item(const std::vector<T>& items, boost::function<bool(const T&)> criteria)
 }
 
 template <typename T>
-T& find_item(std::vector<T>& items, boost::function<bool(const T&)> criteria)
+typename std::vector<T>::iterator
+find_item(std::vector<T>& items, boost::function<bool(const T&)> criteria)
 {
-    return *std::find_if(items.begin(), items.end(), boost::bind(criteria, _1));
+    return std::find_if(items.begin(), items.end(), boost::bind(criteria, _1));
 }
 
 template <typename T>

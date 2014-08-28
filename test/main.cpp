@@ -70,10 +70,10 @@ void test_find_item()
     for (int i = 1; i < 10; ++i)
         numbers.push_back(i);
 
-    int& found = find_item<int>(numbers, is_even);
+    std::vector<int>::iterator found = find_item<int>(numbers, is_even);
 
-    assert(found == 2);
-    assert(numbers[1] == found);
+    assert(*found == 2);
+    assert(numbers[1] == *found);
 
     std::cout << "test_find_item: OK" << std::endl;
 }
