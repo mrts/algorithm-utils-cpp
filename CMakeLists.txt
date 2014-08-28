@@ -3,11 +3,11 @@ SET (CMAKE_BACKWARDS_COMPATIBILITY 2.6)
 
 PROJECT(algorithm-utils)
 
-INCLUDE_DIRECTORIES("include" "../boost/include")
+INCLUDE_DIRECTORIES("include")
 
-FILE (GLOB algorithm-utils_SRC src/[^.]*.cpp)
+FILE (GLOB algorithm-utils_test_SRC test/[^.]*.cpp)
 
-ADD_EXECUTABLE(${PROJECT_NAME} ${algorithm-utils_SRC})
+ADD_EXECUTABLE(${PROJECT_NAME} ${algorithm-utils_test_SRC})
 
 IF(WIN32)
 

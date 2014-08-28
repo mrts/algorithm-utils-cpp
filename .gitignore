@@ -17,3 +17,4 @@
 [Dd]ebug/
 [Rr]elease/
 [Bb]uild/
+include/boost
