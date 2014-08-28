@@ -34,7 +34,8 @@ bool item_exists(const std::vector<T>& items,
 }
 
 template <typename T>
-void remove_if(std::vector<T>& items, boost::function<bool(const T&)> criteria)
+void remove_items_if(std::vector<T>& items,
+                     boost::function<bool(const T&)> criteria)
 {
     items.erase(
         std::remove_if(items.begin(), items.end(), boost::bind(criteria, _1)),
@@ -42,8 +43,8 @@ void remove_if(std::vector<T>& items, boost::function<bool(const T&)> criteria)
 }
 
 template <typename T>
-std::vector<T> copy_if(const std::vector<T>& items,
-                       boost::function<bool(const T&)> criteria)
+std::vector<T> copy_items_if(const std::vector<T>& items,
+                             boost::function<bool(const T&)> criteria)
 {
     std::vector<T> result;
     std::remove_copy_if(items.begin(), items.end(), std::back_inserter(result),
@@ -69,32 +70,32 @@ void test_item_exists()
     std::cout << "test_item_exists: OK" << std::endl;
 }
 
-void test_remove_if()
+void test_remove_items_if()
 {
     std::vector<int> numbers;
     for (int i = 1; i < 10; ++i)
         numbers.push_back(i);
 
-    remove_if<int>(numbers, is_even);
+    remove_items_if<int>(numbers, is_even);
 
     assert(numbers.size() == 5);
     assert(numbers[1] == 3);
 
-    std::cout << "test_remove_if: OK" << std::endl;
+    std::cout << "test_remove_items_if: OK" << std::endl;
 }
 
-void test_copy_if()
+void test_copy_items_if()
 {
     std::vector<int> numbers;
     for (int i = 1; i < 10; ++i)
         numbers.push_back(i);
 
-    std::vector<int> even = copy_if<int>(numbers, is_even);
+    std::vector<int> even = copy_items_if<int>(numbers, is_even);
 
     assert(even.size() == 4);
     assert(even[1] == 4);
 
-    std::cout << "test_copy_if: OK" << std::endl;
+    std::cout << "test_copy_items_if: OK" << std::endl;
 }
 
 void test_find_item()
@@ -114,8 +115,8 @@ void test_find_item()
 int main()
 {
     test_item_exists();
-    test_remove_if();
-    test_copy_if();
+    test_remove_items_if();
+    test_copy_items_if();
     test_find_item();
 
     return 0;
