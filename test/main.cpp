@@ -87,6 +87,13 @@ void test_copy_items_if()
     assert(less_than_4.size() == 3);
     assert(less_than_4[2] == 3);
 
+    // Example of negating bind
+    std::vector<int> not_less_than_5 = copy_items_if<int>(
+        numbers, !boost::bind(is_greater_than, _1, 5));
+
+    assert(not_less_than_5.size() == 5);
+    assert(not_less_than_5[4] == 9);
+
     std::cout << "test_copy_items_if: OK" << std::endl;
 }
 
