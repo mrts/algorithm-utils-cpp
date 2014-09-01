@@ -140,6 +140,12 @@ void test_objects()
     assert(greater_than_3.size() == 6);
     assert(greater_than_3[1].number() == 5);
 
+    std::vector<Item> only_7 =
+        copy_items_if<Item>(items, boost::bind(&Item::number, _1) == 7);
+
+    assert(only_7.size() == 1);
+    assert(only_7[0].number() == 7);
+
     std::cout << "test_objects: OK" << std::endl;
 }
 
