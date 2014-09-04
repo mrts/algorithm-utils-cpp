@@ -14,8 +14,9 @@ an issue in our project where the last argument, the end iterator, was
 accidentally omitted from `vector::erase` calls and this "idiom" had propagated
 into several places in the codebase, causing hard-to-find bugs.
 
-I examined our codebase and found out that the four simple wrappers below cover
-80% of our standard algorithms usage.
+While examining our codebase we found that the four simple wrappers below cover
+80% of our standard algorithms usage - and so we mostly use the wrappers in our
+code now, falling back to the former only for non-trivial cases.
 
 Overview
 --------
@@ -130,7 +131,7 @@ class Item
 {
 public:
     enum ItemColor { Red, Green, Blue };
-    int is_of_color(ItemColor item_color) const;
+    bool is_of_color(ItemColor item_color) const;
 };
 
 bool item_quantity_is_greater_than_a_plus_b(int a, Item item, int b);
@@ -160,6 +161,30 @@ boost::function<bool(int)> item_quantity_is_greater_than_7 =
     boost::bind(item_quantity_is_greater_than_a_plus_b, 3, _1, 4);
 remove_items_if<Item>(items, item_quantity_is_greater_than_7);
 ```
+
+Using comparison in the criteria
+--------------------------------
+
+`boost::bind` supports various operators, including the equality operator `==`.
+This enables building the criteria function in-line. For example, given the
+following class:
+
+```c++
+class Item
+{
+public:
+    enum ItemColor { Red, Green, Blue };
+    ItemColor color;
+};
+```
+
+`==` can be used as follows to filter green items:
+
+```c++
+std::vector<Items> green_items = copy_items_if<Item>(items,
+    boost::bind(&Item::color, _1) == Item::Green);
+```
+
 
 Negating the criteria
 ---------------------
