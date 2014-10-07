@@ -38,7 +38,15 @@ The following wrappers are available:
 matches the required conditions and `false` otherwise.
 
 Note that the wrappers work with `std::vector`s as that's what we use. It is
-probably relatively easy to generalize them, but we don't need that.
+relatively easy to generalize them as follows, but that would complicate
+calling code and we don't want that:
+
+```c++
+template <typename Collection>
+typename Collection::const_iterator
+find_item(const Collection& items,
+          boost::function<bool(const Collection::value_type&)> criteria)
+```
 
 Assume the following declarations in the examples below:
 
